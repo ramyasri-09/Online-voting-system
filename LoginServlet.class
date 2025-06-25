@@ -1,0 +1,48 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.voting;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class LoginServlet extends HttpServlet {
+   public LoginServlet() {
+   }
+
+   protected void doPost(HttpServletRequest var1, HttpServletResponse var2) throws ServletException, IOException {
+      String var3 = var1.getParameter("username");
+      String var4 = var1.getParameter("password");
+
+      try {
+         Class.forName("com.mysql.cj.jdbc.Driver");
+         Connection var5 = DriverManager.getConnection("jdbc:mysql://localhost:3306/votingdb", "root", "Ramya@1431");
+         PreparedStatement var10 = var5.prepareStatement("SELECT * FROM users WHERE username=? AND password=?");
+         var10.setString(1, var3);
+         var10.setString(2, var4);
+         ResultSet var7 = var10.executeQuery();
+         if (var7.next()) {
+            HttpSession var8 = var1.getSession();
+            var8.setAttribute("username", var3);
+            var2.sendRedirect("dashboard.jsp");
+         } else {
+            var2.sendRedirect("login.jsp?error=invalid");
+         }
+
+         var5.close();
+      } catch (Exception var9) {
+         var9.printStackTrace();
+         var2.setContentType("text/html");
+         PrintWriter var6 = var2.getWriter();
+         var6.println("<h2>Error: " + var9.getMessage() + "</h2>");
+      }
+
+   }
+}
