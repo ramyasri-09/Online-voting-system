@@ -1,0 +1,36 @@
+<web-app>
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>com.voting.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/RegisterServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.voting.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>VoteServlet</servlet-name>
+    <servlet-class>com.voting.VoteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VoteServlet</servlet-name>
+    <url-pattern>/VoteServlet</url-pattern>
+  </servlet-mapping>
+<servlet>
+  <servlet-name>ResultServlet</servlet-name>
+  <servlet-class>com.voting.ResultServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ResultServlet</servlet-name>
+  <url-pattern>/ResultServlet</url-pattern>
+</servlet-mapping>
+</web-app>
