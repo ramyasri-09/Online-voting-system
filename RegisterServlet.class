@@ -1,0 +1,34 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.voting;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class RegisterServlet extends HttpServlet {
+   public RegisterServlet() {
+   }
+
+   protected void doPost(HttpServletRequest var1, HttpServletResponse var2) throws ServletException, IOException {
+      String var3 = var1.getParameter("username");
+      String var4 = var1.getParameter("password");
+
+      try {
+         Class.forName("com.mysql.cj.jdbc.Driver");
+         Connection var5 = DriverManager.getConnection("jdbc:mysql://localhost:3306/votingdb", "root", "Ramya@1431");
+         PreparedStatement var6 = var5.prepareStatement("INSERT INTO users(username, password) VALUES(?, ?)");
+         var6.setString(1, var3);
+         var6.setString(2, var4);
+         var6.executeUpdate();
+         var2.sendRedirect("login.jsp");
+      } catch (Exception var7) {
+         var7.printStackTrace();
+      }
+
+   }
+}
