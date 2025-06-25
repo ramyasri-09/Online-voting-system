@@ -1,0 +1,48 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.voting;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class VoteServlet extends HttpServlet {
+   public VoteServlet() {
+   }
+
+   protected void doPost(HttpServletRequest var1, HttpServletResponse var2) throws ServletException, IOException {
+      HttpSession var3 = var1.getSession(false);
+      if (var3 != null && var3.getAttribute("username") != null) {
+         String var4 = (String)var3.getAttribute("username");
+         String var5 = var1.getParameter("candidate");
+
+         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection var6 = DriverManager.getConnection("jdbc:mysql://localhost:3306/votingdb", "root", "Ramya@1431");
+            PreparedStatement var7 = var6.prepareStatement("SELECT * FROM votes WHERE username=?");
+            var7.setString(1, var4);
+            ResultSet var8 = var7.executeQuery();
+            if (var8.next()) {
+               var2.getWriter().println("You have already voted!");
+            } else {
+               PreparedStatement var9 = var6.prepareStatement("INSERT INTO votes(username, candidate) VALUES(?, ?)");
+               var9.setString(1, var4);
+               var9.setString(2, var5);
+               var9.executeUpdate();
+               var2.sendRedirect("result.jsp");
+            }
+         } catch (Exception var10) {
+            var10.printStackTrace();
+         }
+
+      } else {
+         var2.sendRedirect("login.jsp");
+      }
+   }
+}
